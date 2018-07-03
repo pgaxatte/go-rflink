@@ -8,6 +8,12 @@
   revision = "eaafced92e9619f03c72527efeab21e326f3bc36"
 
 [[projects]]
+  name = "github.com/yosssi/gmq"
+  packages = ["mqtt","mqtt/client","mqtt/packet"]
+  revision = "31fa037b1019e383aa033aee1e4d04e106c88ed2"
+  version = "v0.0.1"
+
+[[projects]]
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
@@ -16,6 +22,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "f9a6c4dc440e8e3650be246784e2d7235f7da18d7cda545e30bdaca21f549100"
+  inputs-digest = "d7b5416e5b86c12293104da91f4484b012482de3ea61ee7fad7bc9680e3ca2f2"
   solver-name = "gps-cdcl"
   solver-version = 1
