@@ -18,8 +18,8 @@ func main() {
 	signal.Notify(sigc, os.Interrupt, os.Kill)
 
 	// Parse options
-	opts := rflink.ParseOptions()
-	log.Printf("Options: %v", opts)
+	opts := rflink.GetOptions()
+	log.Printf("Options: %+v", opts)
 
 	// Setup the MQTT publisher
 	p, err := rflink.NewPublisher(opts)

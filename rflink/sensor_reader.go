@@ -16,8 +16,8 @@ type SensorReader struct {
 // NewSensorReader returns a SensorReader according to the options specified
 func NewSensorReader(o *Options) (*SensorReader, error) {
 	port, err := serial.OpenPort(&serial.Config{
-		Name: o.SerialDevice,
-		Baud: o.SerialBaud,
+		Name: o.Serial.Device,
+		Baud: o.Serial.Baud,
 	})
 	if err != nil {
 		return nil, err

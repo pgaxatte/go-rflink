@@ -1,34 +1,35 @@
 package rflink
 
 import (
-	"net/url"
+	"log"
+
+	"github.com/vrischmann/envconfig"
 )
 
 // Options stores the options needed to communicate with RFLink and the
 // message queue
 type Options struct {
 	// MQTT options
-	PublishURL      *url.URL
-	PublishClientID string
-	PublishTopic    string
+	Publish struct {
+		Host     string `envconfig:"default=localhost:1883"` // host:port
+		Scheme   string `envconfig:"default=tcp"`
+		ClientID string `envconfig:"default=rflink"`
+		Topic    string `envconfig:"default=rflink"`
+	}
 
 	// Serial connection options
-	SerialDevice string
-	SerialBaud   int
+	Serial struct {
+		Device string `envconfig:"default=/dev/ttyUSB0"`
+		Baud   int    `envconfig:"default=57600"`
+	}
 }
 
-// ParseOptions reads the options from the configuration, environment or
-// command line arguments and return an Options struct
-func ParseOptions() *Options {
-	return &Options{
-		PublishURL: &url.URL{
-			Scheme: "tcp",
-			Host:   "10.1.0.4:1883",
-		},
-		PublishClientID: "rflink",
-		PublishTopic:    "rflink",
-
-		SerialDevice: "/dev/ttyUSB0",
-		SerialBaud:   57600,
+// GetOptions reads the options from the environment and returns an Options
+// struct
+func GetOptions() *Options {
+	var opts Options
+	if err := envconfig.Init(&opts); err != nil {
+		log.Fatal("Could not parse options:", err)
 	}
+	return &opts
 }

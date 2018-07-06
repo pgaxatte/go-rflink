@@ -25,16 +25,16 @@ func NewPublisher(o *Options) (*Publisher, error) {
 	})
 
 	err := cli.Connect(&client.ConnectOptions{
-		Network:  o.PublishURL.Scheme,
-		Address:  o.PublishURL.Host,
-		ClientID: []byte(o.PublishClientID),
+		Network:  o.Publish.Scheme,
+		Address:  o.Publish.Host,
+		ClientID: []byte(o.Publish.ClientID),
 	})
 	if err != nil {
 		return nil, err
 	}
 	p := &Publisher{
 		c:     cli,
-		Topic: o.PublishTopic,
+		Topic: o.Publish.Topic,
 	}
 	return p, nil
 }
