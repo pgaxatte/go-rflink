@@ -7,6 +7,8 @@ import (
 	"github.com/yosssi/gmq/mqtt/client"
 )
 
+// Publisher takes input from a SensorReader and publishes the SensorData that
+// has been read in an MQTT topic
 type Publisher struct {
 	c *client.Client
 
@@ -14,11 +16,7 @@ type Publisher struct {
 	SensorInput *SensorReader
 }
 
-type PublisherOptions struct {
-	ConnectOptions *client.ConnectOptions
-	Topic          string
-}
-
+// NewPublisher return a Publisher according to the options specified
 func NewPublisher(o *Options) (*Publisher, error) {
 	cli := client.New(&client.Options{
 		ErrorHandler: func(err error) {
@@ -41,6 +39,8 @@ func NewPublisher(o *Options) (*Publisher, error) {
 	return p, nil
 }
 
+// Publish formats the input SensorData into JSON and publishes it to the
+// configured MQTT topic
 func (p *Publisher) Publish(sd *SensorData) error {
 	b, err := json.Marshal(sd)
 	if err != nil {
@@ -59,6 +59,8 @@ func (p *Publisher) Publish(sd *SensorData) error {
 	return nil
 }
 
+// ReadAndPublish loops infinitely to read SensorData from the SensorReader and
+// publish the output via the Publish() method
 func (p *Publisher) ReadAndPublish() error {
 	for {
 		sd, err := p.SensorInput.ReadNext()
@@ -77,10 +79,12 @@ func (p *Publisher) ReadAndPublish() error {
 	return nil
 }
 
+// Disconnect properly disconnects the MQTT network connection
 func (p *Publisher) Disconnect() error {
 	return p.c.Disconnect()
 }
 
+// Terminate kills the MQTT client
 func (p *Publisher) Terminate() {
 	p.c.Terminate()
 }

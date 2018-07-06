@@ -7,11 +7,13 @@ import (
 	"github.com/tarm/serial"
 )
 
+// SensorReader reads SensorData from the serial connection with RFLink
 type SensorReader struct {
 	port   *serial.Port
 	reader *bufio.Reader
 }
 
+// NewSensorReader returns a SensorReader according to the options specified
 func NewSensorReader(o *Options) (*SensorReader, error) {
 	port, err := serial.OpenPort(&serial.Config{
 		Name: o.SerialDevice,
@@ -28,6 +30,8 @@ func NewSensorReader(o *Options) (*SensorReader, error) {
 	return sr, nil
 }
 
+// ReadNext reads a line from RFLink and returns it in the form of a SensorData
+// struct
 func (sr *SensorReader) ReadNext() (*SensorData, error) {
 	line, _, err := sr.reader.ReadLine()
 	if err != nil {
@@ -44,6 +48,7 @@ func (sr *SensorReader) ReadNext() (*SensorData, error) {
 	return sd, nil
 }
 
+// Close closes the serial port
 func (sr *SensorReader) Close() {
 	sr.port.Close()
 }

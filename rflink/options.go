@@ -4,6 +4,8 @@ import (
 	"net/url"
 )
 
+// Options stores the options needed to communicate with RFLink and the
+// message queue
 type Options struct {
 	// MQTT options
 	PublishURL      *url.URL
@@ -15,6 +17,8 @@ type Options struct {
 	SerialBaud   int
 }
 
+// ParseOptions reads the options from the configuration, environment or
+// command line arguments and return an Options struct
 func ParseOptions() *Options {
 	return &Options{
 		PublishURL: &url.URL{

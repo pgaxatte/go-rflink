@@ -1,15 +1,16 @@
 package rflink
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
 	"strings"
-
-	"github.com/yosssi/gmq/mqtt/client"
 )
 
+// SensorData represents one message received from RFLink.
+// It can only contain Temperature or Humidity values and exposes the model
+// id of the sending device.
+// A friendly name can be added to the data so that the Publisher can tag it
+// before sending it to the MQTT topic.
 type SensorData struct {
 	Model        string   `json:"model"`
 	Id           string   `json:"id"`
@@ -18,6 +19,8 @@ type SensorData struct {
 	Humidity     *uint16  `json:"h,omitempty"`
 }
 
+// SensorDataFromMessage crafts a SensorData struct from a message read from
+// RFLink
 func SensorDataFromMessage(msg string) (*SensorData, error) {
 	pieces := strings.Split(msg, ";")
 
@@ -52,6 +55,7 @@ func SensorDataFromMessage(msg string) (*SensorData, error) {
 	return &sd, nil
 }
 
+// String outputs a string representing the SensorData
 func (sd *SensorData) String() string {
 	format := "%s [%s]:"
 	args := []interface{}{
@@ -70,22 +74,4 @@ func (sd *SensorData) String() string {
 	}
 
 	return fmt.Sprintf(format, args...)
-}
-
-func (sd *SensorData) Publish(cli *client.Client) (err error) {
-	b, err := json.Marshal(sd)
-	if err != nil {
-		return err
-	}
-	log.Print(string(b))
-
-	err = cli.Publish(&client.PublishOptions{
-		TopicName: []byte("rflink"),
-		Message:   b,
-	})
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
