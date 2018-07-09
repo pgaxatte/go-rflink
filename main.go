@@ -5,7 +5,7 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/lilorox/go-rflink/rflink"
+	"github.com/pgaxatte/go-rflink/rflink"
 )
 
 var VERSION = "0.0.1"
